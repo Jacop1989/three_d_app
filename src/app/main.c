@@ -10,9 +10,21 @@
 #include <string.h>
 #include <SDL2/SDL.h>
 #include "math/vec.h"
+#include "math/mat4.h"
 #include "renderer/framebuffer.h"
 #include "renderer/line.h"
 #include "app/camera.h"
+
+typedef struct { float x, y, z, w; } vec4;
+
+static vec4 mat4_mul_vec4(mat4 m, vec4 v){
+    vec4 r;
+    r.x = m.m[0]*v.x + m.m[4]*v.y + m.m[8]*v.z + m.m[12]*v.w;
+    r.y = m.m[1]*v.x + m.m[5]*v.y + m.m[9]*v.z + m.m[13]*v.w;
+    r.z = m.m[2]*v.x + m.m[6]*v.y + m.m[10]*v.z + m.m[14]*v.w;
+    r.w = m.m[3]*v.x + m.m[7]*v.y + m.m[11]*v.z + m.m[15]*v.w;
+    return r;
+}
 
 int main(){
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -68,11 +80,35 @@ int main(){
 
         fb_clear(fb, 0x000000ff, 1.0f);
 
-        // ตัวอย่าง: วาดสี่เหลี่ยมจัตุรัส
-        draw_line(fb,100,100,200,100,0xffffffff);
-        draw_line(fb,200,100,200,200,0xffffffff);
-        draw_line(fb,200,200,100,200,0xffffffff);
-        draw_line(fb,100,200,100,100,0xffffffff);
+        float t = SDL_GetTicks() * 0.001f;
+        mat4 model = mat4_mul(mat4_rotate_y(t), mat4_rotate_x(t*0.5f));
+        mat4 mvp = mat4_mul(cam.viewproj, model);
+
+        vec3 verts[8] = {
+            {-1,-1,-1}, {1,-1,-1}, {1,1,-1}, {-1,1,-1},
+            {-1,-1, 1}, {1,-1, 1}, {1,1, 1}, {-1,1, 1}
+        };
+
+        int sx[8], sy[8];
+        for(int i=0;i<8;i++){
+            vec4 v = {verts[i].x, verts[i].y, verts[i].z, 1.0f};
+            vec4 p = mat4_mul_vec4(mvp, v);
+            if(p.w != 0.0f){ p.x/=p.w; p.y/=p.w; p.z/=p.w; }
+            sx[i] = (int)((p.x*0.5f+0.5f)*fb->w);
+            sy[i] = (int)((1.0f-(p.y*0.5f+0.5f))*fb->h);
+        }
+
+        int edges[12][2] = {
+            {0,1},{1,2},{2,3},{3,0},
+            {4,5},{5,6},{6,7},{7,4},
+            {0,4},{1,5},{2,6},{3,7}
+        };
+        for(int i=0;i<12;i++){
+            draw_line(fb,
+                      sx[edges[i][0]], sy[edges[i][0]],
+                      sx[edges[i][1]], sy[edges[i][1]],
+                      0xffffffff);
+        }
 
         memcpy(surf->pixels, fb->color, fb->w*fb->h*4);
         SDL_UpdateWindowSurface(win);
