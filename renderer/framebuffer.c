@@ -4,9 +4,19 @@
 
 framebuffer* fb_create(int w, int h){
     framebuffer* fb = malloc(sizeof(framebuffer));
+    if (!fb) return NULL;
     fb->w = w; fb->h = h;
     fb->color = malloc(sizeof(uint32_t)*w*h);
+    if (!fb->color){
+        free(fb);
+        return NULL;
+    }
     fb->depth = malloc(sizeof(float)*w*h);
+    if (!fb->depth){
+        free(fb->color);
+        free(fb);
+        return NULL;
+    }
     return fb;
 }
 
