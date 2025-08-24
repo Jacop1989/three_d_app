@@ -13,7 +13,7 @@ A simple 3D wireframe renderer written in C.
 Compile the project with:
 
 ```
-gcc main.c math/vec.c renderer/framebuffer.c renderer/line.c -I. -lSDL2 -lm -o cad_wireframe
+gcc src/app/main.c src/app/camera.c src/math/vec.c src/renderer/framebuffer.c src/renderer/line.c -I src -lSDL2 -lm -o cad_wireframe
 ```
 
 ## Run
