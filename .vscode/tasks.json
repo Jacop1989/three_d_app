@@ -6,17 +6,19 @@
       "type": "shell",
       "command": "gcc",
       "args": [
-        "-g",
-        "main.c",
-        "math/vec.c",
-        "renderer/framebuffer.c",
-        "renderer/line.c",
-        "-I.",
+        "src/app/main.c",
+        "src/app/camera.c",
+        "src/math/vec.c",
+        "src/math/mat4.c",
+        "src/renderer/framebuffer.c",
+        "src/renderer/line.c",
+        "-I", "src",
+        "-I", "include",
         "-lSDL2",
         "-lm",
-        "-o",
-        "cad_wireframe"
-      ],
+        "-o", "cad_wireframe",
+        "&&", "./cad_wireframe"
+    ],
       "group": "build"
     }
   ]

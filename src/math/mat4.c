@@ -98,8 +98,4 @@ mat4 P = mat4_perspective(60.0f, 1.0f, 0.1f, 100.0f);
 vec3 eye = {0,0,3}, target = {0,0,0}, up = {0,1,0};
 mat4 V = mat4_look_at(eye, target, up);
 mat4 VP = mat4_mul(P, V);
-<<<<<<< HEAD:math/mat4.c
 */
-=======
-*/
->>>>>>> a36dfee (Restructure: split into /src/{core,math,geo,render,scene,sketch,features,io,ui,app} and /include):src/math/mat4.c

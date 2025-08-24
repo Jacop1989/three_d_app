@@ -1,7 +1,7 @@
 // main.c
 // ตัวอย่างการใช้ framebuffer และ SDL2 เพื่อแสดงผลกราฟิกพื้นฐาน
 // โดยใช้มาตรฐานภาษา C17
-// คอมไพล์ด้วย: gcc src/app/main.c src/app/camera.c src/math/vec.c src/renderer/framebuffer.c src/renderer/line.c -I src -lSDL2 -lm -o cad_wireframe
+// คอมไพล์ด้วย: gcc src/app/main.c src/app/camera.c src/math/vec.c src/math/mat4.c src/renderer/framebuffer.c src/renderer/line.c -I src -I include -lSDL2 -lm -o cad_wireframe
 // คอมไพล์สำหรับ debug: gcc -g src/app/main.c src/app/camera.c src/math/vec.c src/renderer/framebuffer.c src/renderer/line.c -I src -lSDL2 -lm -o cad_wireframe
 // รันด้วย: ./cad_wireframe
 
