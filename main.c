@@ -7,17 +7,38 @@
 
 
 
+#include <string.h>
 #include <SDL2/SDL.h>
 #include "math/vec.h"
 #include "renderer/framebuffer.h"
 #include "renderer/line.h"
 
 int main(){
-    SDL_Init(SDL_INIT_VIDEO);
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        SDL_Log("SDL_Init failed: %s", SDL_GetError());
+        return 1;
+    }
     SDL_Window* win = SDL_CreateWindow("3D",0,0,800,600,0);
+    if (!win) {
+        SDL_Log("SDL_CreateWindow failed: %s", SDL_GetError());
+        SDL_Quit();
+        return 1;
+    }
     SDL_Surface* surf = SDL_GetWindowSurface(win);
+    if (!surf) {
+        SDL_Log("SDL_GetWindowSurface failed: %s", SDL_GetError());
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
+    }
 
     framebuffer* fb = fb_create(surf->w, surf->h);
+    if (!fb) {
+        SDL_Log("fb_create failed");
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        return 1;
+    }
     int running = 1;
     while(running){
         SDL_Event e;
@@ -34,6 +55,7 @@ int main(){
 
         memcpy(surf->pixels, fb->color, fb->w*fb->h*4);
         SDL_UpdateWindowSurface(win);
+        SDL_Delay(16);
     }
     fb_destroy(fb);
     SDL_DestroyWindow(win);
