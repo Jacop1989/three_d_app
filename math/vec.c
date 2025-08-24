@@ -13,5 +13,8 @@ vec3 vec3_cross(vec3 a, vec3 b){
 float vec3_dot(vec3 a, vec3 b){ return a.x*b.x + a.y*b.y + a.z*b.z; }
 vec3 vec3_norm(vec3 v){
     float l = sqrtf(vec3_dot(v,v));
+    if(l == 0.0f){
+        return (vec3){0.0f, 0.0f, 0.0f};
+    }
     return (vec3){v.x/l, v.y/l, v.z/l};
 }
