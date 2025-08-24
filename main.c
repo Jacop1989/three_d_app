@@ -55,7 +55,7 @@ int main(){
 
         memcpy(surf->pixels, fb->color, fb->w*fb->h*4);
         SDL_UpdateWindowSurface(win);
-        SDL_Delay(16);
+        SDL_Delay(16); // Limit to ~60 FPS
     }
     fb_destroy(fb);
     SDL_DestroyWindow(win);
